@@ -1,0 +1,6 @@
+framework module Pods_MovieTunesTests {
+  umbrella header "Pods-MovieTunesTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
