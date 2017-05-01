@@ -11,7 +11,9 @@ import UIKit
 
 extension UIImageView {
     
+    
     func downloadedFrom(url: URL, contentMode mode: UIViewContentMode = .scaleAspectFit) {
+        
         contentMode = mode
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard
@@ -23,7 +25,11 @@ extension UIImageView {
             DispatchQueue.main.async() { () -> Void in
                 self.image = image
             }
+
+            
             }.resume()
+        
+        
     }
     
     func downloadedFrom(link: String, contentMode mode: UIViewContentMode = .scaleAspectFit) {

@@ -14,6 +14,7 @@ class Movie {
     var releasedDate: String!
     var price: String!
     var coverImageURL: String!
+    var largerCoverImageURL: String!
     var itunesURL: String!
 
 }
