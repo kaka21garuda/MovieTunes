@@ -17,6 +17,8 @@ class ViewController: UITableViewController {
     
     var images: NSArray!
     var imgageAttribute: [String: AnyObject]!
+    
+    var dateAttribute: [String: AnyObject]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,9 +64,13 @@ class ViewController: UITableViewController {
                         movie.price = "$0.00"
                     }
                     
-                    if let date = dict["im:releaseDate"]?["label"] {
-                        movie.releasedDate = date as! String
-                    }
+//                    if let date = dict["im:releaseDate"]?["attrib"] {
+//                        movie.releasedDate = date as! String
+//                    }
+                    
+                    
+                    self.dateAttribute = dict["im:releaseDate"]?["attributes"] as! [String: AnyObject]
+                    movie.releasedDate = self.dateAttribute["label"] as! String
                     
                     
                     self.images = dict["im:image"] as! NSArray
@@ -75,12 +81,16 @@ class ViewController: UITableViewController {
                     }
                     
                     self.movies.append(movie)
+                    self.tableView.reloadData()
+                    
                 }
             }
+            
         }
 
     }
-
+    
+    
 }
 
 // MARK: TableView Data Source
@@ -89,8 +99,13 @@ extension ViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let tableViewCell: MovieTableViewCell = tableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as! MovieTableViewCell
         
-        tableViewCell.titleLabel.text = "Title"
-        tableViewCell.priceLabel.text = "Price"
+        tableViewCell.titleLabel.text = movies[indexPath.row].title
+        tableViewCell.priceLabel.text = movies[indexPath.row].price
+        tableViewCell.dateLabel.text = movies[indexPath.row].releasedDate
+        tableViewCell.movieImageView.downloadedFrom(link: movies[indexPath.row].coverImageURL)
+    
+        
+        
         
         return tableViewCell
     }
