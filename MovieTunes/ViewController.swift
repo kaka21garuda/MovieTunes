@@ -23,6 +23,18 @@ class ViewController: UITableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         // MARK: - Networking Request
+        getAllMovies()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func getAllMovies() {
         Alamofire.request("https://itunes.apple.com/us/rss/topmovies/limit=25/json").responseJSON { (response) in
             if let json = response.result.value as? [String: AnyObject] {
                 let feed: [String: AnyObject] = json["feed"] as! [String: AnyObject]
@@ -56,26 +68,35 @@ class ViewController: UITableViewController {
                     
                     
                     self.images = dict["im:image"] as! NSArray
-                    self.imgaeAttribute = self.images[0] as [String: AnyObject]
+                    self.imgageAttribute = self.images[0] as! [String: AnyObject]
                     
-                    if let imageURL =
+                    if let imageURL = self.imgageAttribute["label"] {
+                        movie.coverImageURL = imageURL as! String
+                    }
                     
                     self.movies.append(movie)
-                    return
                 }
             }
         }
-        
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 }
 
+// MARK: TableView Data Source
 extension ViewController {
     
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let tableViewCell: MovieTableViewCell = tableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as! MovieTableViewCell
+        
+        tableViewCell.titleLabel.text = "Title"
+        tableViewCell.priceLabel.text = "Price"
+        
+        return tableViewCell
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return movies.count
+    }
 }
 
